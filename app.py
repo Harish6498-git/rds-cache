@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Redis config
 redis_client = redis.Redis(
-    host='test-3ozrrc.serverless.use2.cache.amazonaws.com',
+    host='test-3ozrrc.serverless.use2.cache.amazonaws.com',  // Replace Your Redis host end-point
     port=6379,
     ssl=True,  # Enable TLS for ElastiCache Redis
     decode_responses=True,
@@ -15,11 +15,11 @@ redis_client = redis.Redis(
 )
 
 # RDS config
-RDS_HOST = 'database-1.chi6cwg4csb9.us-east-2.rds.amazonaws.com'
-RDS_USER = 'admin'
-RDS_PASSWORD = 'Devops123'
-RDS_DB_NAME = 'test'
-TABLE_NAME = 'users'
+RDS_HOST = 'database-1.chi6cwg4csb9.us-east-2.rds.amazonaws.com' // Replace Your DB Endpoint
+RDS_USER = 'admin' // Replace your user-name
+RDS_PASSWORD = 'Devops123' // Replace your password
+RDS_DB_NAME = 'test' // Replace your DB Name
+TABLE_NAME = 'users' // Replace your Table Name
 
 CACHE_KEY = 'cached_table_data'
 
