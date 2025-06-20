@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DevOps RDS + Redis Viewer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #007acc;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      background-color: #007acc;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #005a9e;
+    }
+
+    table {
+      margin: 30px auto;
+      border-collapse: collapse;
+      width: 80%;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+    }
+
+    th {
+      background-color: #007acc;
+      color: white;
+    }
+
+    td {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>👨‍💻 RDS + Redis Data Viewer</h1>
+  <p>Powered by Flask, Redis & RDS</p>
+
+  <div>
+    <button onclick="fetchData(false)">Fetch from Cache</button>
+    <button onclick="fetchData(true)">Refresh from RDS</button>
+  </div>
+
+  <table id="data-table">
+    <thead>
+      <tr id="table-head"></tr>
+    </thead>
+    <tbody id="table-body">
+      <tr><td colspan="4">No data loaded yet.</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchData(refresh = false) {
+      const url = refresh ? '/refresh' : '/get-data';
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error('Invalid data format');
+
+        const thead = document.getElementById('table-head');
+        const tbody = document.getElementById('table-body');
+
+        // Clear existing rows
+        thead.innerHTML = '';
+        tbody.innerHTML = '';
+
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4">No data available</td></tr>';
+          return;
+        }
+
+        // Build table header
+        const headerRow = data[0].map((_, i) => `<th>Column ${i + 1}</th>`).join('');
+        thead.innerHTML = headerRow;
+
+        // Populate table
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = row.map(cell => `<td>${cell}</td>`).join('');
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        alert('Error fetching data: ' + err.message);
+      }
+    }
+  </script>
+
+</body>
+</html>
